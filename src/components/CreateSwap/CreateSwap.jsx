@@ -1,32 +1,36 @@
-import { addDays, format } from 'date-fns';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
-import SwapItemAdmin from '../SwapItemAdmin/SwapItemAdmin';
-import ImageUpload from '../ImageUpload/ImageUpload';
-import './CreateSwap.css';
+import { addDays, format } from "date-fns";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useParams } from "react-router-dom";
+import SwapItemAdmin from "../SwapItemAdmin/SwapItemAdmin";
+import ImageUpload from "../ImageUpload/ImageUpload";
+import "./CreateSwap.css";
+// import FlashMessage from "../FlashMessage/FlashMessage";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CreateSwap() {
+  toast.configure();
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.user);
   const selectedSwap = useSelector((state) => state?.selectedSwap[0]);
 
   const defaultState = {
     is_private: true,
-    start_date: '',
-    sell_date: '',
-    stop_date: '',
-    access_code: '',
-    swap_name: '',
-    swap_img: '',
-    pre_sale_duration: '',
-    sale_duration: '',
-    swap_description: '',
+    start_date: "",
+    sell_date: "",
+    stop_date: "",
+    access_code: "",
+    swap_name: "",
+    swap_img: "",
+    pre_sale_duration: "",
+    sale_duration: "",
+    swap_description: "",
   };
 
   const [swapInfo, setSwapInfo] = useState(defaultState);
 
-  //slug is either 'edit' or doesn't exist.  Id is the id of the swap to be edited. 
+  //slug is either 'edit' or doesn't exist.  Id is the id of the swap to be edited.
   //These are onlky used when editing a swap, not when creating one.
   const { slug, id } = useParams();
 
@@ -41,36 +45,43 @@ export default function CreateSwap() {
   //clicking the request access button will send an email to the owner of SnowSwaps asking for an upgrade to their account
   //allowing a user to create their own swaps.
   const handleRequestAccess = () => {
-    dispatch({ type: 'REQUEST_UPGRADE' });
+    dispatch({ type: "REQUEST_UPGRADE" });
+  };
+  //the the alert system to alert the user of a successful swap creation.
+
+  const notify = () => {
+    toast.success("Swap Created!", { position: toast.POSITION.TOP_CENTER });
   };
 
   //handleSubmit checks if a user is editing a swap or creating a new one and dispatches accordingly.
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (slug === 'edit') {
-      dispatch({ type: 'EDIT_SWAP', payload: swapInfo });
-      history.push('/profile');
+    if (slug === "edit") {
+      dispatch({ type: "EDIT_SWAP", payload: swapInfo });
+      history.push("/profile");
     } else {
-      dispatch({ type: 'CREATE_SWAP', payload: swapInfo });
-      history.push('/');
+      dispatch({ type: "CREATE_SWAP", payload: swapInfo });
+      dispatch({ type: "PRIVATE_TO_PUBLIC", payload: selectedSwap });
+      notify;
+      history.push("/");
     }
   };
 
   const handleCancel = () => {
-    history.push('/');
+    history.push("/");
   };
 
   useEffect(() => {
-    if (slug === 'edit') {
-      dispatch({ type: 'FETCH_SELECTED_SWAP', payload: id });
+    if (slug === "edit") {
+      dispatch({ type: "FETCH_SELECTED_SWAP", payload: id });
     }
   }, []);
 
-  const dateFormat = 'yyyy-MM-dd';
+  const dateFormat = "yyyy-MM-dd";
 
   useEffect(() => {
     //if editing a swap the default state of setSwapInfo is set to the information for that selected swap.
-    if (slug === 'edit' && selectedSwap?.owner === user.id) {
+    if (slug === "edit" && selectedSwap?.owner === user.id) {
       setSwapInfo({
         id: selectedSwap?.id,
         is_private: selectedSwap?.is_private.toString(),
@@ -94,7 +105,7 @@ export default function CreateSwap() {
 
   return (
     <div className="no-overflow">
-      <div className="swap-header">{slug ? 'Edit' : 'Create'} Swap</div>
+      <div className="swap-header">{slug ? "Edit" : "Create"} Swap</div>
       {authLevel < 1 ? (
         <div>
           <p>You do not have authorization to create your own swap.</p>
@@ -114,14 +125,14 @@ export default function CreateSwap() {
                 <button
                   className="ss-btn"
                   type="button"
-                  onClick={() => setSwapInfo({ ...swapInfo, swap_img: '' })}
+                  onClick={() => setSwapInfo({ ...swapInfo, swap_img: "" })}
                 >
                   Change Cover Image
                 </button>
               </div>
             ) : (
               <ImageUpload
-                keyName={'swap_img'}
+                keyName={"swap_img"}
                 state={swapInfo}
                 setState={setSwapInfo}
               />
@@ -153,7 +164,7 @@ export default function CreateSwap() {
                 <p className="">Public</p>
                 <div
                   className={`switch-body switch${
-                    swapInfo.is_private ? 'private' : 'public'
+                    swapInfo.is_private ? "private" : "public"
                   }-body`}
                   onClick={() =>
                     setSwapInfo({
@@ -164,7 +175,7 @@ export default function CreateSwap() {
                 >
                   <div
                     className={`switch-circle ${
-                      swapInfo.is_private ? 'private' : 'public'
+                      swapInfo.is_private ? "private" : "public"
                     }`}
                   ></div>
                 </div>
@@ -238,12 +249,12 @@ export default function CreateSwap() {
               <button className="ss-btn" onClick={handleCancel} type="button">
                 Cancel
               </button>
-              <button className="ss-btn" type="submit">
-                {slug === 'edit' ? 'Save' : 'Create Swap'}
+              <button className="ss-btn" type="submit" onClick={notify}>
+                {slug === "edit" ? "Save" : "Create Swap"}
               </button>
             </div>
           </form>
-          {slug === 'edit' ? <SwapItemAdmin /> : <></>}
+          {slug === "edit" ? <SwapItemAdmin /> : <></>}
         </div>
       )}
     </div>

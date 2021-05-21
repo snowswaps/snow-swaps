@@ -33,6 +33,12 @@ export default function PublicSwapJoinModal() {
           Before you continue, {selectedSwap?.name} requests that you join the
           swap.
         </h3>
+        <center>
+          <h3>
+            When you join the swap, you can contact the owner of items that
+            interest you to secure a trade or sale before the swap becomes open.
+          </h3>
+        </center>
         <br />
         <p>Swap Description:</p>
         <p>{selectedSwap?.swap_description}</p>

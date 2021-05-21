@@ -39,6 +39,13 @@ export default function PublicSwapJoinModal() {
           swap.
         </h3>
         <br />
+        <center>
+          <h3>
+            When you join the swap, you can add items into the swap from My
+            Items. Go to My Items page using the dropdown menu in the top right.
+          </h3>
+        </center>
+        <br />
         <p>Swap Description:</p>
         <p>{selectedSwap?.swap_description}</p>
         <div className="button-container">

@@ -1,31 +1,33 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   HashRouter as Router,
   Redirect,
   Route,
-  Switch
-} from 'react-router-dom';
-import AddGear from '../AddGear/AddGear';
-import AllSwaps from '../AllSwaps/AllSwaps';
-import CreateSwap from '../CreateSwap/CreateSwap';
-import EditGear from '../EditGear/EditGear.jsx';
-import Favorites from '../Favorites/Favorites.jsx';
-import Footer from '../Footer/Footer';
-import LoginPage from '../LoginPage/LoginPage';
-import MyGear from '../MyGear/MyGear';
-import Nav from '../Nav/Nav';
-import Profile from '../Profile/Profile.jsx';
-import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import RegisterPage from '../RegisterPage/RegisterPage';
-import SwapItems from '../SwapItems/SwapItems';
-import './App.css';
+  Switch,
+} from "react-router-dom";
+import AddGear from "../AddGear/AddGear";
+import AllSwaps from "../AllSwaps/AllSwaps";
+import CreateSwap from "../CreateSwap/CreateSwap";
+import EditGear from "../EditGear/EditGear.jsx";
+import Favorites from "../Favorites/Favorites.jsx";
+import Footer from "../Footer/Footer";
+import LoginPage from "../LoginPage/LoginPage";
+import MyGear from "../MyGear/MyGear";
+import Nav from "../Nav/Nav";
+import Profile from "../Profile/Profile.jsx";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import RegisterPage from "../RegisterPage/RegisterPage";
+import SwapItems from "../SwapItems/SwapItems";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./App.css";
 
 function App() {
   const dispatch = useDispatch();
-
+  toast.configure();
   useEffect(() => {
-    dispatch({ type: 'FETCH_USER' });
+    dispatch({ type: "FETCH_USER" });
   }, [dispatch]);
 
   return (
@@ -49,7 +51,6 @@ function App() {
             <Nav />
             <AllSwaps />
           </ProtectedRoute>
-
 
           {/* When a value is supplied for the authRedirect prop the user will
             be redirected to the path supplied when logged in, otherwise they will
