@@ -5,15 +5,15 @@ import { useHistory, useParams } from "react-router-dom";
 import SwapItemAdmin from "../SwapItemAdmin/SwapItemAdmin";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import "./CreateSwap.css";
-// import FlashMessage from "../FlashMessage/FlashMessage";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import ToastNotify from "../ToastNotify/ToastNotify";
 
 export default function CreateSwap() {
-  toast.configure();
+  // toast.configure();
   const dispatch = useDispatch();
   const user = useSelector((state) => state?.user);
   const selectedSwap = useSelector((state) => state?.selectedSwap[0]);
+  const createMessage = "Swap Created!";
+  const editMessage = "Swap Edited Successfully!";
 
   const defaultState = {
     is_private: true,
@@ -49,20 +49,21 @@ export default function CreateSwap() {
   };
   //the the alert system to alert the user of a successful swap creation.
 
-  const notify = () => {
-    toast.success("Swap Created!", { position: toast.POSITION.TOP_CENTER });
-  };
+  // const notify = () => {
+  //   toast.success("Swap Created!", { position: toast.POSITION.TOP_CENTER });
+  // };
 
   //handleSubmit checks if a user is editing a swap or creating a new one and dispatches accordingly.
   const handleSubmit = (event) => {
     event.preventDefault();
     if (slug === "edit") {
       dispatch({ type: "EDIT_SWAP", payload: swapInfo });
+      ToastNotify(editMessage);
       history.push("/profile");
     } else {
       dispatch({ type: "CREATE_SWAP", payload: swapInfo });
       dispatch({ type: "PRIVATE_TO_PUBLIC", payload: selectedSwap });
-      notify;
+      ToastNotify(createMessage);
       history.push("/");
     }
   };
@@ -249,7 +250,7 @@ export default function CreateSwap() {
               <button className="ss-btn" onClick={handleCancel} type="button">
                 Cancel
               </button>
-              <button className="ss-btn" type="submit" onClick={notify}>
+              <button className="ss-btn" type="submit">
                 {slug === "edit" ? "Save" : "Create Swap"}
               </button>
             </div>

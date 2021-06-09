@@ -2,12 +2,14 @@ import { Modal } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
+import ToastNotify from "../ToastNotify/ToastNotify";
 
 export default function PublicSwapJoinModal() {
   const selectedSwap = useSelector((state) => state?.selectedSwap);
   const stateOfContact = useSelector((state) => state?.contactJoin);
   const history = useHistory();
   const dispatch = useDispatch();
+  const joinMessage = "You have Joined the Swap!";
 
   const contactJoinSwap = () => {
     // add this swap the the user's joined swaps, then close the modal
@@ -15,6 +17,7 @@ export default function PublicSwapJoinModal() {
     dispatch({ type: "CLOSE_CONTACT_JOIN" });
     dispatch({ type: "OPEN_DETAIL_VIEW" });
     dispatch({ type: "ABLE_TO_CONTACT" });
+    ToastNotify(joinMessage);
   };
 
   // a modal to prompt the user to join a public swap.
